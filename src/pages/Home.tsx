@@ -6,6 +6,7 @@ import HeroDemo from "../components/HeroDemo";
 import Logo from "../components/Logo";
 import Nav from "../components/Nav";
 import Reveal from "../components/Reveal";
+import { pretty, referenceUrl } from "../lib/words";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -359,7 +360,8 @@ function Vocabulary() {
           </h2>
           <p className="mt-5 text-mist/60">
             Family, food, animals, feelings, colours, the words a child learns first — the same
-            vocabulary the PopSign learning app was built on.
+            vocabulary the PopSign learning app was built on. Tap any word to watch how it's
+            signed.
           </p>
         </div>
         <label className="hairline flex items-center gap-3 rounded-full bg-white/[0.04] px-5 py-3 md:w-72">
@@ -379,12 +381,21 @@ function Vocabulary() {
         <div className="hairline max-h-[26rem] overflow-y-auto rounded-[2rem] bg-white/[0.02] p-6 md:p-8">
           <div className="flex flex-wrap gap-2">
             {shown.map((l) => (
-              <span
+              <a
                 key={l}
-                className="rounded-full bg-white/[0.04] px-3.5 py-1.5 text-sm text-mist/75 transition-colors duration-500 ease-spring hover:bg-mint/15 hover:text-mist"
+                href={referenceUrl(l)}
+                target="_blank"
+                rel="noreferrer"
+                title={`Watch how to sign "${pretty(l)}"`}
+                className="group inline-flex items-center gap-2 rounded-full bg-white/[0.04] py-1.5 pl-3.5 pr-2 text-sm text-mist/75 transition-all duration-500 ease-spring hover:bg-mint/15 hover:text-mist active:scale-[0.97]"
               >
-                {l}
-              </span>
+                {pretty(l)}
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/[0.06] text-mist/50 transition-colors duration-500 ease-spring group-hover:bg-mint/30 group-hover:text-mist">
+                  <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="currentColor">
+                    <path d="M3.5 2.2v7.6L9.4 6z" />
+                  </svg>
+                </span>
+              </a>
             ))}
             {labels.length > 0 && shown.length === 0 && (
               <p className="font-serif text-xl italic text-mist/40">Not in the vocabulary yet.</p>

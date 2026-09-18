@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import Nav from "../components/Nav";
 import type { Phase, Snapshot } from "../engine/recognizer";
 import { useRecognizer } from "../hooks/useRecognizer";
+import { pretty, referenceUrl } from "../lib/words";
 
 const PHASE_LABEL: Record<Phase, string> = {
   filling: "Warming up",
@@ -24,21 +25,6 @@ const PHASE_TONE: Record<Phase, string> = {
   unclear: "text-amber",
 };
 
-function pretty(label: string): string {
-  // Dataset glosses are lowercase, sometimes compound: "frenchfries", "callonphone".
-  const map: Record<string, string> = {
-    frenchfries: "french fries",
-    callonphone: "call on phone",
-    glasswindow: "glass window",
-    hesheit: "he / she / it",
-    minemy: "mine / my",
-    haveto: "have to",
-    icecream: "ice cream",
-    thankyou: "thank you",
-    TV: "TV",
-  };
-  return map[label] ?? label;
-}
 
 export default function Translate() {
   const {
@@ -367,7 +353,22 @@ function WordReadout({ snapshot }: { snapshot: Snapshot | null }) {
                     : "—"}
             </motion.p>
           </AnimatePresence>
-          <p className="mt-2 text-sm text-mist/50">{snapshot?.note ?? "Camera is off"}</p>
+          <p className="mt-2 text-sm text-mist/50">
+            {snapshot?.note ?? "Camera is off"}
+            {showResult && (
+              <>
+                {" · "}
+                <a
+                  href={referenceUrl(result.label)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-mint/80 underline-offset-4 transition-colors duration-500 ease-spring hover:text-mint hover:underline"
+                >
+                  watch this sign ↗
+                </a>
+              </>
+            )}
+          </p>
         </div>
         {showResult && (
           <div className="hidden shrink-0 flex-col items-end sm:flex">
